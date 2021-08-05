@@ -5,9 +5,7 @@ import LoginForm from '../components/Login'
 
 const Home = () => (
     <div className="portfolio-app">
-        <Header />
-        <LoginForm />
-        <Footer />
+        <LoginForm/>
     </div>
 )
 

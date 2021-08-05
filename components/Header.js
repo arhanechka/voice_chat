@@ -1,11 +1,32 @@
 import Link from 'next/link'
+import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
 
 const Header = ()=> {
     return (
     <div className="navbar-wrapper">
-    <nav className="navbar navbar-expand-lg navbar-dark fj-mw9">
-
+        <Navbar expand="lg" className="navbar-dark fj-mw9">
+        <Navbar.Brand className="mr-3 font-weight-bold" href="/">Voice chats</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Nav className="mr-auto">
+          <Link href="/board">
+            <a className="nav-link" href="#">Voice room</a>
+            </Link>
+          </Nav>
+          <Nav>
+          <Link href="/">
+            <a className="nav-link" href="#">Sign Up</a>
+            </Link>
+            <Link href="/">
+            <a className="nav-link" href="#">Sign In</a>
+            </Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    {/* <nav className="navbar navbar-expand-lg navbar-dark fj-mw9">
+    <Link href="/">
       <a className="navbar-brand mr-3 font-weight-bold" href="#">Voice chats</a>
+      </Link>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -13,7 +34,7 @@ const Header = ()=> {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav">
           <li className="nav-item mr-3">
-          <Link href="/voiceroom">
+          <Link href="/board">
             <a className="nav-link" href="#">Voice room</a>
             </Link>
           </li>
@@ -29,7 +50,7 @@ const Header = ()=> {
           </li>
         </ul>
       </div>
-    </nav>
+    </nav> */}
   </div>
     )}
 
