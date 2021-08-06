@@ -1,14 +1,16 @@
+
 const express = require('express');
 const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const app = express();
+const { getUsers, client } = require('./db') 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 
-const db = require('./db')
+const db = require('./db');
 
 app.use(cors());
 var allowlist = ['http://localhost:3000']
@@ -22,9 +24,9 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions) // callback expects two parameters: error and options
 }
 
-app.get('/users', db.getUsers)
-app.post('/user', db.createUser)
-app.get('/user', db.getUserByName)
+// app.get('/users', db.getUsers)
+// app.post('/user', db.createUser)
+// app.get('/user', db.getUserByName)
 
 const data = {
     users: [
@@ -57,6 +59,12 @@ type User {
       }
   `);
 
+  const showUsers = async ()=>{
+    const users = await getUsers();
+     return users
+    // console.log(users.rows)
+  }
+
 const root = {
     login: () => {
       return 'bob', 'jake'
@@ -66,11 +74,8 @@ const root = {
     },
     users:  () => {
       // return data.users
-    let users = db.getUsers();
-    console.log(users)
-      
-    users.then(res = console.log(res))
-     return users
+      console.log(showUsers())
+     return showUsers();
     }
   }
 
