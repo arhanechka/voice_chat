@@ -73,11 +73,13 @@ const root = {
         return data.users[0]
     },
     users:  () => {
-      // return data.users
-      console.log(showUsers())
-     return showUsers();
+      async ()=>{
+        const users = await getUsers();
+        console.log(users.rows)
+         return users
     }
   }
+}
 
   app.use('/graphql', graphqlHTTP({
     schema: schema,
