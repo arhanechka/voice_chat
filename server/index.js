@@ -3,19 +3,12 @@ const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const app = express();
-const bodyParser = require('body-parser')
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
+
+
 const db = require('./db')
-
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
-
-app.get('/users', db.getUsers)
-app.post('/user', db.createUser)
-app.get('/user', db.getUserById)
 
 app.use(cors());
 var allowlist = ['http://localhost:3000']
@@ -29,18 +22,22 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions) // callback expects two parameters: error and options
 }
 
-
+app.get('/users', db.getUsers)
+app.post('/user', db.createUser)
+app.get('/user', db.getUserByName)
 
 const data = {
     users: [
         {
-            name: 'Ann',
-            address: "ghjhgjhgj"
+          id: 1,  
+          name: 'Ann',
+            password: "ghjhgjhgj"
         },
         {
-            name: 'Igoe',
-            age: 40,
-            address: "ghjhgjhdfsfgj"
+          id: 2,  
+          name: 'Mary',
+            age: 41,
+            password: "ghjhgjhdfsfgj"
         },
 
     ]
@@ -48,9 +45,9 @@ const data = {
 
 const schema = buildSchema(`
 type User {
-    name: String!,
-    password: String!,
-    id: Int
+    id: Int,
+    name: String,
+    password: String
 }
 
       type Query {
@@ -67,8 +64,13 @@ const root = {
     user: () => {
         return data.users[0]
     },
-    users: () => {
-        return db.getUsers
+    users:  () => {
+      // return data.users
+    let users = db.getUsers();
+    console.log(users)
+      
+    users.then(res = console.log(res))
+     return users
     }
   }
 
