@@ -1,96 +1,63 @@
-
-const express = require('express');
-const cors = require('cors');
-const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
+const express = require("express");
+const cors = require("cors");
+const { graphqlHTTP } = require("express-graphql");
+const { buildSchema } = require("graphql");
 const app = express();
-const { getUsers, client } = require('./db') 
+const { userTypes } = require("./gql/types");
+const { resolvers } = require("./gql/resolvers");
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
-
-const db = require('./db');
+const db = require("./db");
 
 app.use(cors());
-var allowlist = ['http://localhost:3000']
+var allowlist = ["http://localhost:3000"];
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
-  if (allowlist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  if (allowlist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
   } else {
-    corsOptions = { origin: false } // disable CORS for this request
+    corsOptions = { origin: false }; // disable CORS for this request
   }
-  callback(null, corsOptions) // callback expects two parameters: error and options
-}
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
 
 // app.get('/users', db.getUsers)
 // app.post('/user', db.createUser)
 // app.get('/user', db.getUserByName)
 
-const data = {
-    users: [
-        {
-          id: 1,  
-          name: 'Ann',
-            password: "ghjhgjhgj"
-        },
-        {
-          id: 2,  
-          name: 'Mary',
-            age: 41,
-            password: "ghjhgjhdfsfgj"
-        },
-
-    ]
-}
-
 const schema = buildSchema(`
-type User {
-    id: Int,
-    name: String,
-    password: String
-}
-
-      type Query {
+${userTypes}
+  type Query {
         login: [String]
         user: User
         users: [User]
-      }
+  }
+  type Mutation {
+    createUser(input: UserInput): User
+  }
   `);
 
-  const showUsers = async ()=>{
-    const users = await getUsers();
-     return users
-    // console.log(users.rows)
-  }
-
 const root = {
-    login: () => {
-      return 'bob', 'jake'
-    },
-    user: () => {
-        return data.users[0]
-    },
-    users:  () => {
-      async ()=>{
-        const users = await getUsers();
-        console.log(users.rows)
-         return users
-    }
-  }
-}
+  ...resolvers,
+};
 
-  app.use('/graphql', graphqlHTTP({
+app.use(
+  "/graphql",
+  graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
-  }));
+  })
+);
 
-app.use('/login', cors(corsOptionsDelegate), (req, res) => {
-    res.send({
-      token: 'test123'
-    });
+app.use("/login", cors(corsOptionsDelegate), (req, res) => {
+  res.send({
+    token: "test123",
   });
-  
-  app.listen(8081, () => console.log('API is running on http://localhost:8081/login'));
+});
+
+app.listen(8081, () =>
+  console.log("API is running on http://localhost:8081/login")
+);
