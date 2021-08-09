@@ -1,10 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const { graphqlHTTP } = require("express-graphql");
-const { buildSchema } = require("graphql");
+const {ApolloServer, gql} = require('apollo-server-express') 
 const app = express();
 const { userTypes } = require("./gql/types");
-const { resolvers } = require("./gql/resolvers");
+const { queryResolvers, mutationResolvers } = require("./gql/resolvers");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,11 +22,7 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
-// app.get('/users', db.getUsers)
-// app.post('/user', db.createUser)
-// app.get('/user', db.getUserByName)
-
-const schema = buildSchema(`
+const typeDefs = gql`
 ${userTypes}
   type Query {
         login: [String]
@@ -37,26 +32,19 @@ ${userTypes}
   type Mutation {
     createUser(input: UserInput): User
   }
-  `);
+  `;
 
-const root = {
-  ...resolvers,
+const resolvers = {
+  Query: {
+    ...queryResolvers
+  },
+  Mutation: {
+  ...mutationResolvers,
+  }
 };
 
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-  })
-);
-
-app.use("/login", cors(corsOptionsDelegate), (req, res) => {
-  res.send({
-    token: "test123",
-  });
-});
+const apolloServer = new ApolloServer({typeDefs, resolvers})
+apolloServer.applyMiddleware({app: app})
 
 app.listen(8081, () =>
   console.log("API is running on http://localhost:8081/login")

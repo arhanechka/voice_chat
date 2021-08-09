@@ -29,10 +29,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/board": [
+    "/agora/[call]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/board.js"
+      "static/chunks/pages/agora/[call].js"
     ]
   },
   "ampFirstPages": []

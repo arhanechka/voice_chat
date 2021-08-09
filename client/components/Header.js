@@ -1,7 +1,24 @@
 import Link from 'next/link'
 import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
+import React, { useContext } from "react";
+import SettingsContext from "../stores/setingsContext";
+import useSettings from "../stores/useSettings";
 
 const Header = ()=> {
+  const context = useContext(SettingsContext).settings
+  const { settings, saveSettings } = useSettings();
+  const handleLogin = ()=>{
+    if (signIn === "Logout"){
+    console.log("Logout")
+    clearContext()
+    }
+  }
+
+  const clearContext = () => {
+    saveSettings({user: null, logged: false});
+  };
+
+  const signIn = context.logged? "Logout": "Sign In"
     return (
     <div className="navbar-wrapper">
         <Navbar expand="lg" className="navbar-dark fj-mw9">
@@ -14,11 +31,11 @@ const Header = ()=> {
             </Link>
           </Nav>
           <Nav>
-          <Link href="/">
-            <a className="nav-link" href="#">Sign Up</a>
-            </Link>
             <Link href="/">
-            <a className="nav-link" href="#">Sign In</a>
+            <a 
+            className="nav-link" href="#"
+            onClick={handleLogin}
+            >{signIn}</a>
             </Link>
           </Nav>
         </Navbar.Collapse>

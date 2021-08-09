@@ -1,45 +1,52 @@
 import axios from 'axios'
 import { response } from 'express'
+// import { gql, useMutation } from '@apollo/client';
 
 
 const API_URL = 'http://localhost:8081'
 
+// const LOGIN = gql`
+//   mutation createUser($name: String!, $password: String!) {
+//     createUser(name: $name, password: $password) {
+//       id
+//       name
+//       password
+//     }
+//   }
+// `;
+
 export const login = async (name: string, password: string) => {
-  console.log(name)
-  console.log(password)
-    await axios
-      .post(`${API_URL}/user`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          name: name,
-          password: password
-        },
-      })
-      .then((response) => {
-       console.log(response.data);
-      })
-      .catch((error)=>{
-        console.log(error)
-      });
+  // let query = `mutation createUser {
+  //   createUser(input: {name: "${name}", password: "${password}"}){
+  //     name,
+  //     password,
+  //     id
+  //   }
+  // }`
+  // console.log(name)
+  // console.log(password)
+  //  let res =  await axios
+  //     .post(`${API_URL}/graphql`, {query
+  //       })
+  //       console.log("res.data.data.createUser")
+
+  //       console.log(res.data.data.createUser)
+  //       return res.data.data.createUser
+      
+      // .then((response) => {
+      //  console.log(response.data);
+      // })
+      // .catch((error)=>{
+      //   console.log(error)
+      // });
 }
 
 export const getUsers = async (query) => {
+  console.log(query)
   let res;
-    return axios
+   res =  await axios
       .post(`${API_URL}/graphql`, {
         query
       })
-      .then(response => 
-        response.data)
-      .then(data => data.data)
-      .then(data => data.users)
-      .then(users => {
-        console.log(users)
-        return users})
-      .catch((error)=>{
-        console.log(error)
-      });
-      return res
+      return res.data.data.users
 }
