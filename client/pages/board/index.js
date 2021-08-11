@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import { getUsers } from "../../axios/api";
 import { useRouter } from "next/router";
 import { GET_USERS } from "../../apollo/queries";
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import SettingsContext from "../../stores/setingsContext";
 
 const ChatBoard = ({ query }) => {
@@ -28,7 +28,7 @@ const ChatBoard = ({ query }) => {
   return (<div>Loading...</div>)
 
   if (!context.logged)
-  return <div class="lead text-center mt-4">Please, Sign in for using Voice chats</div>
+  return <div className="lead text-center mt-4">Please, Sign in for using Voice chats</div>
 
   return (
     <div>

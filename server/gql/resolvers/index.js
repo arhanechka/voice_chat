@@ -16,12 +16,15 @@ exports.queryResolvers = {
 exports.mutationResolvers = {
  
     createUser: async (root, { input }) => {
+        console.log("in mut resolver ")
+        console.log(input)
       let user = await getUserByName(input);
       if (user.rows.length == 0) {
         const resp = await createUser(input);
-        console.log(resp)
         user = await getUserByName(input);
       }
+      console.log("return")
+      console.log(user.rows[0])
       return user.rows[0];
     }
   };

@@ -1,27 +1,36 @@
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "@apollo/react-hooks";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql
+} from "@apollo/client";
 import { SettingsProvider } from "../stores/setingsContext";
 import { CookiesProvider } from "react-cookie";
+import client from "../apollo/apollo-client";
 
 import "../styles/index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const client = new ApolloClient({
-  uri: "http://localhost:8081/graphql",
-});
+// export const client = new ApolloClient({
+//   uri: "http://localhost:8081/graphql",
+//   cache: new InMemoryCache()
+// });
 function MyApp({ Component, pageProps }) {
   return (
+    <ApolloProvider client={client}>
+
     <CookiesProvider>
       <SettingsProvider>
-        <ApolloProvider client={client}>
           <Header />
           <Component {...pageProps} />
           <Footer />
-        </ApolloProvider>
       </SettingsProvider>
     </CookiesProvider>
+    </ApolloProvider>
+
   );
 }
 export default MyApp;
