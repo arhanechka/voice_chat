@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import SettingsContext from "../stores/setingsContext";
 import useSettings from "../stores/useSettings";
 import { useCookies } from 'react-cookie'
+import client from "../apollo/apollo-client"
 
 
 const Header = ()=> {
@@ -12,7 +13,7 @@ const Header = ()=> {
   const [cookies, removeCookie] = useCookies(['user'])
   const handleLogin = ()=>{
     if (signIn === "Logout"){
-    console.log("Logout")
+    client.cache.clearContext()
     clearContext()
     removeCookie('user')
     }

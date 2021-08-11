@@ -12,7 +12,6 @@ const ChatBoard = ({ query }) => {
   const [value, setValue] = useState("Voice Chat");
 
   const context = useContext(SettingsContext).settings
-  console.log(context)
   const [getApiUsers, { loading, error, data }] = useLazyQuery(GET_USERS);
   //on initial state
   // const { loading, error, data } = useQuery(queryGetUsers);

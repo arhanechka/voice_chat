@@ -19,15 +19,9 @@ const LoginForm = () => {
   const [isDisabled, setIsDisabled] = useState(true)
 
 
-  const [handleClick, { error, loading, data }] = useMutation(LOGIN_USER, {
-    fetchPolicy: "no-cache"});
+  const [handleClick, { error, loading, data }] = useMutation(LOGIN_USER);
 
   useEffect(() => {
-    console.log("useEffect")
-    console.log("waiting for data")
-    console.log(loading)
-    console.log(error)
-    console.log(data)
     if (data) {
       setUser(data.createUser);
       console.log(data.createUser)
@@ -37,14 +31,10 @@ const LoginForm = () => {
   });
 
   const handleLogin = ()=>{
-    console.log("handle click")
-    console.log(name)
-    console.log(password)
     handleClick({ variables: { name: name, password: password }})
   }
 
   const setContext = () => {
-    console.log("setting context")
     saveSettings({user: data.createUser, logged: true});
   };
 
