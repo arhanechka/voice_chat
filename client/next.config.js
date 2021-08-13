@@ -7,7 +7,10 @@ module.exports = {
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
   },
+  
 //   env: {
 //     BASE_URL: dev ? 'http://localhost:3000/graphql' : 'https://jergafilip.herokuapp.com/graphql'
 //   }
 }
+
+

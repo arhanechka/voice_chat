@@ -5,6 +5,9 @@ import SettingsContext from "../stores/setingsContext";
 import useSettings from "../stores/useSettings";
 import { useCookies } from 'react-cookie'
 import client from "../apollo/apollo-client"
+import Image from 'next/image'
+import img from '../assets/1.png';
+
 
 
 const Header = ()=> {
@@ -20,13 +23,20 @@ const Header = ()=> {
   }
 
   const clearContext = () => {
-    saveSettings({user: null, logged: false});
+    saveSettings({user: null, logged: false, token: null});
   };
 
   const signIn = context.logged? "Logout": "Sign In"
     return (
     <div className="navbar-wrapper">
         <Navbar expand="lg" className="navbar-dark fj-mw9">
+          {/* <div className='.mr-1'>
+        <Image 
+        src={require('../pages/logo.png')} 
+        width={50}
+        height={50}
+        alt="Picture of the author" />
+</div> */}
         <Navbar.Brand className="link-light" as={Link} href="/"><div className="h4 text-white-50">Voice chats</div></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>

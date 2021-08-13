@@ -7,7 +7,12 @@ import { GET_USERS } from "../../apollo/queries";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import SettingsContext from "../../stores/setingsContext";
 
+
+
 const ChatBoard = ({ query }) => {
+
+  const withImages = require('next-images')
+  module.exports = withImages()
   
   const [value, setValue] = useState("Voice Chat");
 
@@ -31,6 +36,7 @@ const ChatBoard = ({ query }) => {
 
   return (
     <div>
+           
       <section className="section-title">
         <div className="px-2"></div>
       </section>

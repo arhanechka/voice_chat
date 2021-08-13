@@ -4,6 +4,7 @@ const {ApolloServer, gql} = require('apollo-server-express')
 const app = express();
 const { userTypes } = require("./gql/types");
 const { queryResolvers, mutationResolvers } = require("./gql/resolvers");
+const {generateAccessToken} = require("./agora/index")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,12 +23,20 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
+const nocache = (req, resp, next) => {
+  resp.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  resp.header('Expires', '-1');
+  resp.header('Pragma', 'no-cache');
+  next();
+};
+
 const typeDefs = gql`
 ${userTypes}
   type Query {
         login: [String]
         user: User
-        users: [User]
+        users: [User],
+        agoraToken: AgoraToken
   }
   type Mutation {
     createUser(input: UserInput): User
@@ -43,9 +52,15 @@ const resolvers = {
   }
 };
 
+// app.get('/', ()=>{console.log("root")});
+
+// app.get('/access_token', nocache, generateAccessToken);
+
 const apolloServer = new ApolloServer({typeDefs, resolvers})
 apolloServer.applyMiddleware({app: app})
 
+
+
 app.listen(8081, () =>
-  console.log("API is running on http://localhost:8081/login")
+  console.log("API is running on http://localhost:8081")
 );

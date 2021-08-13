@@ -9,4 +9,8 @@ input UserInput {
     name: String!,
     password: String!
 }
+
+type AgoraToken {
+    token: String!
+}
 `;

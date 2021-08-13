@@ -5,7 +5,8 @@ const SettingsContext = createContext();
 const defaultSettings = {
    user: null,
    token: null,
-   logged: false
+   logged: false,
+   avatar: null
 };
 
 export const SettingsProvider = ({ children, settings }) => {

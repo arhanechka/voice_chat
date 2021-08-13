@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import useSettings from "../stores/useSettings";
 import SettingsContext from "../stores/setingsContext";
 import { useCookies } from 'react-cookie';
+import { getRandomAvatarName } from "../utils/utils";
 
 const LoginForm = () => {
   const { settings, saveSettings } = useSettings();
@@ -35,7 +36,9 @@ const LoginForm = () => {
   }
 
   const setContext = () => {
-    saveSettings({user: data.createUser, logged: true});
+    let number = getRandomAvatarName()
+    console.log(number)
+    saveSettings({user: data.createUser, logged: true, avatar: number});
   };
 
   useEffect(()=>{

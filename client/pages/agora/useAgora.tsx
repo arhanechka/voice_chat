@@ -24,7 +24,7 @@ export default function useAgora(client: IAgoraRTCClient | undefined)
   : Promise<[IMicrophoneAudioTrack, ICameraVideoTrack]> {
     const [microphoneTrack, cameraTrack] = await AgoraRTC.createMicrophoneAndCameraTracks(audioConfig, videoConfig);
     setLocalAudioTrack(microphoneTrack);
-    // setLocalVideoTrack(cameraTrack);
+    setLocalVideoTrack(cameraTrack);
     return [microphoneTrack, cameraTrack];
   }
 
@@ -37,7 +37,7 @@ export default function useAgora(client: IAgoraRTCClient | undefined)
     await client.publish([microphoneTrack, cameraTrack]);
 
     (window as any).client = client;
-    // (window as any).videoTrack = cameraTrack;
+    (window as any).videoTrack = cameraTrack;
 
     setJoinState(true);
   }
@@ -47,10 +47,10 @@ export default function useAgora(client: IAgoraRTCClient | undefined)
       localAudioTrack.stop();
       localAudioTrack.close();
     }
-    // if (localVideoTrack) {
-    //   localVideoTrack.stop();
-    //   localVideoTrack.close();
-    // }
+    if (localVideoTrack) {
+      localVideoTrack.stop();
+      localVideoTrack.close();
+    }
     setRemoteUsers([]);
     setJoinState(false);
     await client?.leave();
