@@ -4,7 +4,7 @@ const {ApolloServer, gql} = require('apollo-server-express')
 const app = express();
 const { userTypes } = require("./gql/types");
 const { queryResolvers, mutationResolvers } = require("./gql/resolvers");
-const {generateAccessToken} = require("./agora/index")
+const { clientUrl } = require("./config")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -12,22 +12,15 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./db");
 
 app.use(cors());
-var allowlist = ["http://localhost:3000"];
+var allowlist = [clientUrl];
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+    corsOptions = { origin: true }; 
   } else {
-    corsOptions = { origin: false }; // disable CORS for this request
+    corsOptions = { origin: false }; 
   }
-  callback(null, corsOptions); // callback expects two parameters: error and options
-};
-
-const nocache = (req, resp, next) => {
-  resp.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-  resp.header('Expires', '-1');
-  resp.header('Pragma', 'no-cache');
-  next();
+  callback(null, corsOptions); 
 };
 
 const typeDefs = gql`
@@ -36,7 +29,8 @@ ${userTypes}
         login: [String]
         user: User
         users: [User],
-        agoraToken: AgoraToken
+        agoraToken (appId: String, appSert: String, channelName: String): AgoraToken,
+        channels: [Channel]
   }
   type Mutation {
     createUser(input: UserInput): User
@@ -52,14 +46,8 @@ const resolvers = {
   }
 };
 
-// app.get('/', ()=>{console.log("root")});
-
-// app.get('/access_token', nocache, generateAccessToken);
-
 const apolloServer = new ApolloServer({typeDefs, resolvers})
 apolloServer.applyMiddleware({app: app})
-
-
 
 app.listen(8081, () =>
   console.log("API is running on http://localhost:8081")

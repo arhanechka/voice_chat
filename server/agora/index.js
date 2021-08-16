@@ -1,10 +1,9 @@
 const {RtcTokenBuilder, RtcRole} = require('agora-access-token');
+const axios = require('axios')
+const { agoraConfig } = require("../config")
 
-const APP_ID = "68f8df76ddf14870b06c08f45c749885";
-const APP_CERTIFICATE = "4ec2400f9ef1460e9d9f1f49c0033b9e";
-const CHANNEL_NAME = "voice_test"
+ const generateAccessToken = (appId, appSert, channelName) => {
 
- const generateAccessToken = (req, resp) => {
     // resp.header('Acess-Control-Allow-Origin', '*');
   // get channel name
 //   const channelName = "voice_test";
@@ -32,11 +31,60 @@ const CHANNEL_NAME = "voice_test"
   const currentTime = Math.floor(Date.now() / 1000);
   const privilegeExpireTime = currentTime + expireTime;
   // build the token
-  const token = RtcTokenBuilder.buildTokenWithUid(APP_ID, APP_CERTIFICATE, CHANNEL_NAME, uid, role, privilegeExpireTime);
+  const token = RtcTokenBuilder.buildTokenWithUid(appId, appSert, channelName, uid, role, privilegeExpireTime);
   console.log(token)
   // return the token
 //   return resp.json({ 'token': token });
   return token
  };
 
- module.exports = {generateAccessToken}
+ const getAgoraProjects = ()=>{
+  const plainCredential = agoraConfig.agoraKey + ":" + agoraConfig.agoraSecret
+  encodedCredential = Buffer.from(plainCredential).toString('base64')
+  authorizationField = "Basic " + encodedCredential
+  
+  return axios({
+    method: 'get',
+    baseURL: 'http://api.agora.io',
+    url: '/dev/v1/projects',
+    headers: {'Authorization':authorizationField,
+  'Content-Type': 'application/json'},  
+  })
+  // .then(res => {
+  //   console.log(`statusCode: ${res.status}`)
+  //   console.log(res.data.projects)
+  //   return res.data.projects
+  // })
+  // .catch(error => {
+  //   console.error(error)
+  // })
+ }
+
+ const creatAgoraProject = (name)=>{
+  const plainCredential = customerKey + ":" + customerSecret
+  encodedCredential = Buffer.from(plainCredential).toString('base64')
+  authorizationField = "Basic " + encodedCredential
+  
+  axios({
+    method: 'post',
+    baseURL: 'http://api.agora.io',
+    url: '/dev/v1/projects',
+    headers: {'Authorization':authorizationField,
+  'Content-Type': 'application/json'},  
+  data: {
+    name: 'testPr',
+    enable_sign_key: false
+  },
+  })
+  .then(res => {
+    console.log(`statusCode: ${res.status}`)
+    console.log(res.data.projects)
+    return res.data.projects
+  })
+  .catch(error => {
+    console.error(error)
+  })
+ }
+
+
+ module.exports = {generateAccessToken, getAgoraProjects, creatAgoraProject}

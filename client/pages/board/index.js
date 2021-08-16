@@ -1,42 +1,60 @@
 import React, { useState, useEffect, useContext } from "react";
 import VoiceRoomCard from "../../components/LiveRoomBadge";
-import Header from "../../components/Header";
-import { getUsers } from "../../axios/api";
-import { useRouter } from "next/router";
-import { GET_USERS } from "../../apollo/queries";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { GET_CHANNELS } from "../../apollo/queries";
+import { useQuery } from "@apollo/client";
 import SettingsContext from "../../stores/setingsContext";
+import useSettings from "../../stores/useSettings";
 
-
-
-const ChatBoard = ({ query }) => {
-
-  const withImages = require('next-images')
-  module.exports = withImages()
-  
+const ChatBoard = () => {
+  const { settings, saveSettings } = useSettings();
   const [value, setValue] = useState("Voice Chat");
+  const [channels, setChannels] = useState();
 
-  const context = useContext(SettingsContext).settings
-  const [getApiUsers, { loading, error, data }] = useLazyQuery(GET_USERS);
-  //on initial state
-  // const { loading, error, data } = useQuery(queryGetUsers);
-  //if something should be requested on the start, better use useLazyQuery and fetch it in useEffect with []
+  const context = useContext(SettingsContext).settings;
 
-  let newarr = data
-    ? data.users.map(function (item, i) {
-        return <p key={item.id}>{item.name}</p>;
-      })
-    : "";
+  const {
+    loading: load,
+    error: err,
+    data: datachannels,
+  } = useQuery(GET_CHANNELS, {
+    onCompleted: () => setChannels(datachannels.channels),
+  });
 
-  if (loading) 
-  return (<div>Loading...</div>)
+  useEffect(() => {
+    if (datachannels)
+      saveSettings({
+        user: context.user,
+        logged: context.logged,
+        channels: datachannels.channels,
+      });
+  }, [datachannels]);
+
+  if (load) return <div>Loading...</div>;
+
+  const channelslist = datachannels ? (
+    datachannels.channels.map((el) => (
+      <div className="mb-3" key={el.id}>
+        <VoiceRoomCard
+          title={el.name}
+          descr="Want to learn more about how Career Karma?"
+          id={el.id}
+          channel={el}
+        />
+      </div>
+    ))
+  ) : (
+    <div></div>
+  );
 
   if (!context.logged)
-  return <div className="lead text-center mt-4">Please, Sign in for using Voice chats</div>
+    return (
+      <div className="lead text-center mt-4">
+        Please, Sign in for using Voice chats
+      </div>
+    );
 
   return (
     <div>
-           
       <section className="section-title">
         <div className="px-2"></div>
       </section>
@@ -45,23 +63,7 @@ const ChatBoard = ({ query }) => {
         <div className="row">
           <div className="col-md-5 mx-auto">
             <h1 className="h3">Live rooms on air</h1>
-            <div>
-              <VoiceRoomCard
-                title="Welcome to Career Karma 🥳"
-                descr="Want to learn more about how Career Karma?"
-                action="Join"
-                type="warning"
-              />
-            </div>
-            <br></br>
-            <VoiceRoomCard />
-            <br></br>
-            <button
-            onClick={()=>{
-              getApiUsers()}}>
-              Fetch
-            </button>
-            {newarr}
+            {channelslist}
           </div>
         </div>
       </div>
@@ -69,8 +71,8 @@ const ChatBoard = ({ query }) => {
   );
 };
 
-// ChatBoard.getInitialProps = async ({ query }) => {
-//   return { query };
-// };
+ChatBoard.getInitialProps = async ({ query }) => {
+  return { query };
+};
 
 export default ChatBoard;

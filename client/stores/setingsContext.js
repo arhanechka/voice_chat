@@ -4,9 +4,8 @@ const SettingsContext = createContext();
 
 const defaultSettings = {
    user: null,
-   token: null,
    logged: false,
-   avatar: null
+   channels: null
 };
 
 export const SettingsProvider = ({ children, settings }) => {
@@ -15,9 +14,6 @@ export const SettingsProvider = ({ children, settings }) => {
    );
 
    const saveSettings = (values) => {
-      console.log("values")
-
-      console.log(values)
      setCurrentSettings(values)
    };
 
