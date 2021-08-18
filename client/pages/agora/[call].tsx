@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import useAgora from './useAgora';
 import MediaPlayer from './MediaPlayer';
 import { useRouter } from 'next/router';
-import SettingsContext from "../../stores/setingsContext";
+import SettingsContext from "../../stores/setingsContext.js";
 import { getRandomAvatarName } from '../../utils/utils';
 import Image from 'next/image'
 import { client } from '../../agora/index'

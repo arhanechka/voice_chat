@@ -9,7 +9,7 @@ const { clientUrl } = require("./config")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const db = require("./db");
+const db = require("./db/index");
 
 app.use(cors());
 var allowlist = [clientUrl];

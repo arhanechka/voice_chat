@@ -1,6 +1,4 @@
-import {
-  ApolloProvider,
-} from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import { SettingsProvider } from "../stores/setingsContext";
 import { CookiesProvider } from "react-cookie";
 import client from "../apollo/apollo-client";
@@ -13,13 +11,13 @@ import Footer from "../components/Footer";
 function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={client}>
-    <CookiesProvider>
-      <SettingsProvider>
+      <CookiesProvider>
+        <SettingsProvider>
           <Header />
           <Component {...pageProps} />
           <Footer />
-      </SettingsProvider>
-    </CookiesProvider>
+        </SettingsProvider>
+      </CookiesProvider>
     </ApolloProvider>
   );
 }

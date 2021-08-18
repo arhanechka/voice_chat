@@ -8,7 +8,7 @@ const defaultSettings = {
    channels: null
 };
 
-export const SettingsProvider = ({ children, settings }) => {
+export const SettingsProvider = ({ children, settings}) => {
    const [currentSettings, setCurrentSettings] = useState(
       settings || defaultSettings
    );

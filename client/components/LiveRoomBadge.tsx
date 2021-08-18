@@ -21,7 +21,7 @@ const VoiceRoomCard = (props) => {
       appSert: props.channel.sign_key,
       channelName: props.channel.name,
     },
-    onCompleted: () => setToken(dat.agoraToken.token),
+    // onCompleted: () => setToken(dat.agoraToken.token),
   });
 
   const { settings, saveSettings } = useSettings();
@@ -43,7 +43,9 @@ const VoiceRoomCard = (props) => {
         logged: context.logged,
         channels: newChannelsList,
       });
+      console.log(context)
     }
+    
   }, [dat, load, err]);
 
   return (

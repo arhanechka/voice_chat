@@ -1,4 +1,4 @@
-const { getUsers, client, createUser, getUserByName } = require("../../db");
+const { getUsers, client, createUser, getUserByName } = require("../../db/index");
 const { generateAccessToken } = require("../../agora/index");
 const { getRandomAvatarName } = require("../../utils/utils");
 const { ValidationError } = require("apollo-server-express");
@@ -44,6 +44,7 @@ exports.mutationResolvers = {
     else {
       let newUser = user.rows[0];
       newUser.avatar = getRandomAvatarName();
+      console.log(newUser)
       return newUser;
     }
   },

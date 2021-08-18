@@ -11,8 +11,8 @@ const LoginForm = () => {
   const { settings, saveSettings } = useSettings();
   const context = useContext(SettingsContext).settings
   const [cookies, setCookie] = useCookies(['user']);
-  const [name, setName] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState<String>();
+  const [password, setPassword] = useState<String>();
   const [user, setUser] = useState();
   const [isDisabled, setIsDisabled] = useState(true)
 

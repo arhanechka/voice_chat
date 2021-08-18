@@ -5,7 +5,8 @@ export const LOGIN_USER = gql`
     createUser(input: { name: $name, password: $password }) {
       name
       password
-      id
-ß    }
+      id,
+      avatar
+    }
   }
 `;
