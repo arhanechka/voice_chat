@@ -1,54 +1,22 @@
 const express = require("express");
-const cors = require("cors");
-const {ApolloServer, gql} = require('apollo-server-express') 
+const { ApolloServer } = require("apollo-server-express");
 const app = express();
-const { userTypes } = require("./gql/types");
 const { queryResolvers, mutationResolvers } = require("./gql/resolvers");
-const { clientUrl } = require("./config")
+const { typeDefs } = require("./gql/typeDefs");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const db = require("./db/index");
-
-app.use(cors());
-var allowlist = [clientUrl];
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (allowlist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }; 
-  } else {
-    corsOptions = { origin: false }; 
-  }
-  callback(null, corsOptions); 
-};
-
-const typeDefs = gql`
-${userTypes}
-  type Query {
-        login: [String]
-        user: User
-        users: [User],
-        agoraToken (appId: String, appSert: String, channelName: String): AgoraToken,
-        channels: [Channel]
-  }
-  type Mutation {
-    createUser(input: UserInput): User
-  }
-  `;
-
 const resolvers = {
   Query: {
-    ...queryResolvers
+    ...queryResolvers,
   },
   Mutation: {
-  ...mutationResolvers,
-  }
+    ...mutationResolvers,
+  },
 };
 
-const apolloServer = new ApolloServer({typeDefs, resolvers})
-apolloServer.applyMiddleware({app: app})
+const apolloServer = new ApolloServer({ typeDefs, resolvers });
+apolloServer.applyMiddleware({ app: app });
 
-app.listen(8081, () =>
-  console.log("API is running on http://localhost:8081")
-);
+app.listen(8081, () => console.log("Server is running on http://localhost:8081"));
