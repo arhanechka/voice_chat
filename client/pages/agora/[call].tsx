@@ -2,36 +2,27 @@ import React, { useEffect, useState, useContext } from 'react';
 import useAgora from './useAgora';
 import MediaPlayer from './MediaPlayer';
 import { useRouter } from 'next/router';
-import SettingsContext from "../../stores/setingsContext.js";
+import SettingsContext from "../../stores/setingsContext";
 import { getRandomAvatarName } from '../../utils/utils';
 import Image from 'next/image'
 import { client } from '../../agora/index'
 import{ IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng';
-
-interface IChannel {
-  id: string,
-  name: string,
-  sign_key: string,
-  vendor_key: string,
-  status: number,
-  token: string
-}
-
+import { Channel, IContext } from "../../stores/interfaces/interfaces"
 
 function Call() {
   const router = useRouter();
   const roomName = router.query.roomName;
   const channelId = router.query.channelId
-  const context = useContext(SettingsContext).settings
+  const context: IContext = useContext(SettingsContext).settings
   const [users, setUsers] = useState<IAgoraRTCRemoteUser[]>()
-  const [channel, setChannel] = useState<IChannel>()
+  const [channel, setChannel] = useState<Channel>()
 
   const {
     localAudioTrack, leave, join, joinState, remoteUsers
   } = useAgora(client);
 
   useEffect(()=>{
-    const channelF = context.channels.filter(el => {
+    const channelF: Channel[] = context.channels.filter(el => {
       return el.id === channelId
     })
     setChannel(channelF[0])
@@ -42,6 +33,7 @@ function Call() {
   })
 
   const joinChannel = ()=>{
+    if (channel !== undefined)
       join(channel.vendor_key, channel.name, channel.token)
   }
 

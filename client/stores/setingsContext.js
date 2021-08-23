@@ -1,12 +1,12 @@
 import { createContext, useState } from "react";
 
-const SettingsContext = createContext();
-
 const defaultSettings = {
-   user: null,
+   user: undefined,
    logged: false,
-   channels: null
+   channels: undefined
 };
+
+const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children, settings}) => {
    const [currentSettings, setCurrentSettings] = useState(

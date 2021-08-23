@@ -17,7 +17,7 @@ const Header = () => {
       console.log(e.message);
     }
     clearContext();
-    removeCookie("user");
+    removeCookie("user", null);
   };
 
   const clearContext = () => {

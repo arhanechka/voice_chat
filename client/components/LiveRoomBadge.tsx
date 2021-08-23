@@ -1,15 +1,21 @@
 import Link from "next/link";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_AGORA_TOKEN } from "../apollo/queries";
 import useSettings from "../stores/useSettings";
 import SettingsContext from "../stores/setingsContext";
-import { useEffect } from "react/cjs/react.development";
-import { getRandomAvatarName } from "../utils/utils";
+import { Channel } from "../stores/interfaces/interfaces"
 
-const VoiceRoomCard = (props) => {
+interface Props {
+  channel: Channel,
+  title: string,
+  descr: string,
+  id: string
+}
+
+const VoiceRoomCard = (props: Props) => {
   const [roomName, setRoomName] = useState("");
-  const [channel, setChannel] = useState();
+  const [channel, setChannel] = useState<Channel>();
 
   const {
     loading: load,
@@ -20,8 +26,7 @@ const VoiceRoomCard = (props) => {
       appId: props.channel.vendor_key,
       appSert: props.channel.sign_key,
       channelName: props.channel.name,
-    },
-    // onCompleted: () => setToken(dat.agoraToken.token),
+    }
   });
 
   const { settings, saveSettings } = useSettings();
@@ -32,7 +37,7 @@ const VoiceRoomCard = (props) => {
       let token = dat.agoraToken.token;
       let channel = { ...props.channel, token };
       setChannel(channel);
-      const newChannelsList = context.channels.map((o) => {
+      const newChannelsList = context.channels.map((o: Channel) => {
         if (o.id === channel.id) {
           return channel;
         }

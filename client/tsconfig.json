@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "noUnusedLocals": false,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,7 +23,8 @@
     "experimentalDecorators": true
   },
   "include": [
-    "src"
+    "pages",
+    "stores"
   ],
   "exclude": [
     "node_modules"
