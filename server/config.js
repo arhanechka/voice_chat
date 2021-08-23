@@ -13,4 +13,8 @@ const agoraConfig = {
     agoraSecret: "26e5177e12b443be98c222337c201714"
 }
 
-module.exports = {dbConfig, clientUrl, agoraConfig}
+const axiosConfig = {
+    baseURL: "http://api.agora.io"
+}
+
+module.exports = {dbConfig, clientUrl, agoraConfig, axiosConfig}
