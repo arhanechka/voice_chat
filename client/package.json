@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier-check": "prettier 'src/**/*' --check --ignore-unknown",
+    "prettier-format": "prettier 'src/**/*' --write --ignore-unknown"
   },
   "keywords": [],
   "author": "",
