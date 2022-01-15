@@ -1,6 +1,6 @@
 name: Prettier
 
-on: pull_request
+on: push
 
 jobs:
   prettier:
@@ -12,8 +12,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: "yarn"
 
       - run: yarn install
       - run: yarn prettier-check
-
