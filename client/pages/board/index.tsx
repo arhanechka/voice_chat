@@ -55,7 +55,6 @@ const ChatBoard = () => {
 
   return (
     <div>
-      ghasgdjfhfda
       <section className="section-title">
         <div className="px-2"></div>
       </section>
